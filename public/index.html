@@ -87,9 +87,7 @@
             // https://firebase.google.com/docs/reference/js/firebase.User
             theUser = user; // you will see theUser below
 
-            console.log(user);
             theUser = user.uid;
-            console.log(theUser);
             // Wait for the user to log in before we show the course table
             $('#content').show();
             new CourseManager(theUser);
