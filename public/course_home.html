@@ -38,7 +38,7 @@
   <link href="mystyle.css" rel="stylesheet">
 
   <!-- Custom js -->
-  <link href="course_manager.js" rel="stylesheet">
+  <script defer src="course_manager.js"></script>
 
 </head>
 
@@ -92,13 +92,11 @@
           </div>
 
           <hr class="mb-4">
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Add User</button>
+          <button id="add-user" class="btn btn-primary btn-lg btn-block" type="submit">Add User</button>
         </form>
       </div>
     </div>
   </div>
-
-
   <!-- <p id="load">Firebase SDK Loading&hellip;</p> -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -108,6 +106,27 @@
       // if (!user) {
       //   location.href = "index.html";
       // }
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          // User is signed in.
+          var displayName = user.displayName;
+          var email = user.email;
+          var emailVerified = user.emailVerified;
+          var photoURL = user.photoURL;
+          var isAnonymous = user.isAnonymous;
+          var uid = user.uid;
+          var providerData = user.providerData;
+          // ...
+
+          new CourseManager(user);
+
+        } else {
+          location.href = "index.html";
+          // User is signed out.
+          // ...
+        }
+      });
+   
 
       // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
       // // The Firebase SDK is initialized and available here!
@@ -127,6 +146,7 @@
         console.error(e);
         // document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
       }
+
     });
   </script>
 </body>
