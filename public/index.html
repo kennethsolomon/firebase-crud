@@ -68,7 +68,6 @@
 
   <!--  Google Login! -->
   <script>
-
     function googleLogin() {
       var provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider).then(function (result) {
@@ -94,8 +93,13 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-    
-      
+      // Check if the user is login
+      var user = firebase.auth().currentUser;
+      if (user) {
+        location.href = "course_home.html";
+      }
+
+
       // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
       // // The Firebase SDK is initialized and available here!
       //
