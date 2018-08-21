@@ -21,6 +21,12 @@ class CourseManager {
   }
 
   addUser(theUser) {
+
+    // if checkTextbox return false return nothing 
+    if(!this.checkTextbox()){
+      return;
+    }
+    // else proceed ->
     var id = (new Date()).getTime().toString(36);
     let course = {
       name: $('#course-title').val(),
@@ -35,6 +41,21 @@ class CourseManager {
     $('#course-description').val("");
     this.insertCourseInTable(id, course);
 
+  }
+
+  // Check if the textbox is empty or not.
+  checkTextbox() {
+    if ($('#course-title').val() == "") {
+      alert("please enter course title");
+      $('#course-title').focus();
+      return false;
+    }
+    if ($('#course-description').val() == "") {
+      alert("please enter course description");
+      $('#course-description').focus();
+      return false;
+    }
+    return true;
   }
 
   getMdlTableSelector() {
