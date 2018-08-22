@@ -76,7 +76,7 @@ class CourseManager {
   }
   insertCourseInTable(id, course) {
     let list = $('#course-table-body').append(
-      `<tr id="${id}">
+      `<tr id="course_${id}">
             ${this.getMdlTableSelector()}
             <td class="mdl-data-table__cell--non-numeric course-title ">${ course.name }</td>
             <td class="mdl-data-table__cell--non-numeric course-description">${ course.description }</td>
@@ -87,25 +87,15 @@ class CourseManager {
 
   setupDeleteHandler(theUser) {
     $('.course-delete-row').click((e) => {
-      // e.currentTarget is the delete icon
-      var i = e.currentTarget;
-      // it is inside a td
-      var td = i.parentElement;
-      // The td is inside a tr
+      var deleteIcon = e.currentTarget;
+      var td = deleteIcon.parentElement;
       var tr = td.parentElement;
-      // The tr is inside a tbody
       var tbody = tr.parentElement;
-      // The format of the id is "course_<id>"
-      // We want to get the <id> part.
-      var id = tr.id.substr(length);
+      var id = tr.id.substr("course_".length);
       var testDataRef = firebase.database().ref('users/' + theUser + '/courses/' + id);
-      testDataRef.remove() // This makes request to firebase
-        .then(()=>{// if it succeeds we will go there
-        
-          // We want to make sure we update the UI only if firebase succeeds
+      testDataRef.remove().then(()=>{
           tbody.removeChild(tr);
-          
-        }).catch(()=>{ // if it fails we will go here
+        }).catch(()=>{
           console.log("failed to delete");
         });
     }).css('cursor', 'pointer');
