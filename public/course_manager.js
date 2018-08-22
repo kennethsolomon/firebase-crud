@@ -3,9 +3,8 @@ class CourseManager {
 
   constructor(theUser) {
     this.user = theUser;
-
+    $('#course-table-body').sortable();
     $('#add-course').click(() => this.addUser(theUser));
-
 
     firebase.database().ref('users/' + theUser + '/courses').once('value', (snapshot) => {
       let courses = snapshot.val();
@@ -15,9 +14,11 @@ class CourseManager {
           this.insertCourseInTable(id, course);
         }
         componentHandler.upgradeElements(document.getElementById('course-table'));
+        this.setupDeleteHandler(theUser);
       }
     });
-
+    
+    
   }
 
   addUser(theUser) {
@@ -84,5 +85,30 @@ class CourseManager {
     componentHandler.upgradeElements(list.children().last());
   }
 
+  setupDeleteHandler(theUser) {
+    $('.course-delete-row').click((e) => {
+      // e.currentTarget is the delete icon
+      var i = e.currentTarget;
+      // it is inside a td
+      var td = i.parentElement;
+      // The td is inside a tr
+      var tr = td.parentElement;
+      // The tr is inside a tbody
+      var tbody = tr.parentElement;
+      // The format of the id is "course_<id>"
+      // We want to get the <id> part.
+      var id = tr.id.substr(length);
+      var testDataRef = firebase.database().ref('users/' + theUser + '/courses/' + id);
+      testDataRef.remove() // This makes request to firebase
+        .then(()=>{// if it succeeds we will go there
+        
+          // We want to make sure we update the UI only if firebase succeeds
+          tbody.removeChild(tr);
+          
+        }).catch(()=>{ // if it fails we will go here
+          console.log("failed to delete");
+        });
+    }).css('cursor', 'pointer');
+  }
 
 }
