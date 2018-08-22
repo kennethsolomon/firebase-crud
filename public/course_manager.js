@@ -17,14 +17,13 @@ class CourseManager {
         this.setupDeleteHandler(theUser);
       }
     });
-    
-    
+    ths.setupDeleteHandler(theUser);
   }
 
   addUser(theUser) {
 
     // if checkTextbox return false return nothing 
-    if(!this.checkTextbox()){
+    if (!this.checkTextbox()) {
       return;
     }
     // else proceed ->
@@ -41,6 +40,7 @@ class CourseManager {
     $('#course-title').val("");
     $('#course-description').val("");
     this.insertCourseInTable(id, course);
+    this.setupDeleteHandler(theUser);
 
   }
 
@@ -93,11 +93,11 @@ class CourseManager {
       var tbody = tr.parentElement;
       var id = tr.id.substr("course_".length);
       var testDataRef = firebase.database().ref('users/' + theUser + '/courses/' + id);
-      testDataRef.remove().then(()=>{
-          tbody.removeChild(tr);
-        }).catch(()=>{
-          console.log("failed to delete");
-        });
+      testDataRef.remove().then(() => {
+        tbody.removeChild(tr);
+      }).catch(() => {
+        console.log("failed to delete");
+      });
     }).css('cursor', 'pointer');
   }
 
