@@ -15,9 +15,11 @@ class CourseManager {
         }
         componentHandler.upgradeElements(document.getElementById('course-table'));
         this.setupDeleteHandler(theUser);
+        this.setupTitleChangeHandler(theUser);
       }
     });
-    ths.setupDeleteHandler(theUser);
+    this.setupDeleteHandler(theUser);
+    this.setupTitleChangeHandler(theUser);
   }
 
   addUser(theUser) {
@@ -41,9 +43,10 @@ class CourseManager {
     $('#course-description').val("");
     this.insertCourseInTable(id, course);
     this.setupDeleteHandler(theUser);
-
+    this.setupTitleChangeHandler(theUser);
   }
-
+  
+  
   // Check if the textbox is empty or not.
   checkTextbox() {
     if ($('#course-title').val() == "") {
@@ -100,5 +103,28 @@ class CourseManager {
       });
     }).css('cursor', 'pointer');
   }
+  setupTitleChangeHandler(theUser) {
+    $('.course-title').click((e) => {
+      var td = e.currentTarget;
+      let oldTitle = $(td).text();
+      let newTitle = prompt("Enter course title", oldTitle);
+      if (oldTitle != newTitle) {
+        
+        var courseId = td.parentElement.id.substr("course_".length);
+
+        var updates = {
+          name: newTitle
+        };
+        var testDataRef = firebase.database().ref('users/' + theUser + '/courses/' + courseId);
+        testDataRef.update(updates).then(()=>{ 
+            $(td).text(newTitle);
+          }).catch(()=>{
+            console.log("failed to update");
+          });
+      }
+    }).css('cursor', 'pointer');
+  }
+
 
 }
+
